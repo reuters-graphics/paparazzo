@@ -1,0 +1,84 @@
+{
+  "name": "@reuters-graphics/paparazzo",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "./dist/index.js",
+  "exports": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "paparazzo": "./dist/cli.js"
+  },
+  "repository": "https://github.com/reuters-graphics/paparazzo",
+  "author": "",
+  "license": "MIT",
+  "private": false,
+  "keywords": [],
+  "files": [
+    "dist/**/*"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "c8": {
+    "reporter": [
+      "text",
+      "lcov"
+    ]
+  },
+  "scripts": {
+    "prepublishOnly": "npm run build",
+    "build": "rollup --config rollup.config.js",
+    "docs:build": "typedoc",
+    "docs:preview": "live-server ./docs",
+    "test": "npm run build && c8 mocha test/*.ts"
+  },
+  "lint-staged": {
+    "./src/*.js": [
+      "eslint --cache --fix",
+      "prettier --write"
+    ]
+  },
+  "devDependencies": {
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "@tsconfig/recommended": "^1.0.3",
+    "@types/expect.js": "^0.3.32",
+    "@types/lodash-es": "^4.17.12",
+    "@types/mocha": "^10.0.6",
+    "@types/mock-fs": "^4.13.4",
+    "@types/prompts": "^2.4.9",
+    "@types/update-notifier": "^6.0.8",
+    "@types/validator": "^13.11.8",
+    "@typescript-eslint/eslint-plugin": "^6.18.1",
+    "@typescript-eslint/parser": "^6.18.1",
+    "c8": "^9.1.0",
+    "dotenv": "^16.3.1",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "expect.js": "^0.3.1",
+    "lefthook": "^1.5.6",
+    "live-server": "1.2.1",
+    "mocha": "^10.2.0",
+    "mock-fs": "^5.2.0",
+    "open": "^10.0.3",
+    "prettier": "^3.2.2",
+    "puppeteer": "^21.7.0",
+    "rimraf": "^5.0.5",
+    "rollup": "^4.9.5",
+    "rollup-plugin-node-externals": "^6.1.2",
+    "sinon": "^17.0.1",
+    "ts-node": "^10.9.2",
+    "tsc-alias": "^1.8.8",
+    "tslib": "^2.6.2",
+    "typedoc": "^0.25.7",
+    "typedoc-plugin-mermaid": "^1.10.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "sade": "^1.8.1",
+    "update-notifier": "^7.0.0"
+  }
+}

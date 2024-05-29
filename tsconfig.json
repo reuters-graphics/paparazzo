@@ -1,0 +1,41 @@
+{
+  "include": ["src/**/*.ts", "test/**/*.ts"],
+  "exclude": ["node_modules"],
+  "compilerOptions": {
+    "rootDir": ".",
+    "baseUrl": "./src",
+    "moduleResolution": "node",
+    "module": "ESNext",
+    "outDir": "dist",
+    "declaration": true,
+    "declarationDir": "dist",
+    "noEmitOnError": true,
+    "resolveJsonModule": true,
+    "target": "ESNext",
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "typeRoots": ["./node_modules/@types", "./dist/index.d.ts"],
+    "paths": {
+      "@reuters-graphics/paparazzo": ["./index.ts"]
+    }
+  },
+  "typedocOptions": {
+    "entryPoints": ["src/index.ts"],
+    "out": "docs",
+    "cleanOutputDir": true,
+    "darkHighlightTheme": "github-dark",
+    "lightHighlightTheme": "github-light",
+    "sort": ["required-first"],
+    "disableSources": true,
+    "plugin": ["typedoc-plugin-mermaid"],
+    "titleLink": "https://reuters-graphics.github.io/paparazzo/",
+    "navigationLinks": {
+      "GitHub": "https://github.com/reuters-graphics/paparazzo/",
+      "npm": "https://www.npmjs.com/package/@reuters-graphics/paparazzo/"
+    },
+    "readme": "HOME.md"
+  }
+}
