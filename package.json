@@ -78,6 +78,8 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@sindresorhus/slugify": "^2.2.1",
+    "playwright": "^1.44.1",
     "sade": "^1.8.1",
     "update-notifier": "^7.0.0"
   }

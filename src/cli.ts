@@ -6,16 +6,34 @@ import updateNotifier from 'update-notifier';
 
 updateNotifier({ pkg: { name, version } }).notify();
 
-const prog = sade('paparazzo');
+sade('paparazzo [url]', true)
+  .version(version)
+  .describe('Take screenshots of page elements')
+  .option(
+    '-s, --selector',
+    'CSS selector of element on the page to screenshot',
+    'body'
+  )
+  .option('-f, --format', 'Output image format, either "jpeg" or "png"', 'jpeg')
+  .option(
+    '-o, --outDir',
+    'Directory to output image, relative to current working director',
+    'paparazzo'
+  )
+  .option('-q, --quality', 'Image quality (jpeg format only)', 90)
+  .option('-c, --crawl', 'Crawl links for other pages', false)
+  .action(async (url: string, opts: Record<string, string>) => {
+    const { selector, format, quality, crawl, outDir } = opts;
 
-prog.version(version);
-
-prog
-  .command('greet <name>')
-  .option('-h, --happy', 'Happy to see them?')
-  .action((name, opts) => {
     const paparazzo = new Paparazzo();
-    paparazzo.greet(name, opts.happy);
-  });
 
-prog.parse(process.argv);
+    const OPTS = {
+      format: format as 'jpeg' | 'png',
+      outDir: outDir as string,
+      quality: parseInt(quality) || 90,
+      crawl: !!crawl,
+    };
+
+    await paparazzo.shoot(url, selector, OPTS);
+  })
+  .parse(process.argv);
