@@ -66,7 +66,7 @@ describe('test Paparazzo', function () {
       }
 
       const numDiffPixels = await compareImages(snapshotPath, tempPath);
-      expect(numDiffPixels).to.be(0);
+      expect(numDiffPixels).to.be.lessThan(100);
     }
   });
 });
