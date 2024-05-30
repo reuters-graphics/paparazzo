@@ -4,6 +4,6 @@
 
 [![npm version](https://badge.fury.io/js/%40reuters-graphics%2Fpaparazzo.svg)](https://badge.fury.io/js/%40reuters-graphics%2Fpaparazzo) [![Reuters open source software](https://badgen.net/badge/Reuters/open%20source/?color=ff8000)](https://github.com/reuters-graphics/)
 
-A CLI tool for taking screenshots of page elements.
+A dumb CLI tool for taking screenshots of page elements.
 
 [Read the docs.](https://reuters-graphics.github.io/paparazzo/)
