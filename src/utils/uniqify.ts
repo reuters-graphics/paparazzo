@@ -1,40 +1,25 @@
-import slugify from '@sindresorhus/slugify';
+export const getUniqueSlugs = (urls: string[]) => {
+  // Parse URLs and extract paths
+  const paths = urls.map((url) => {
+    const { pathname } = new URL(url);
+    return pathname.split('/').filter((segment) => segment);
+  });
 
-function getLastSegment(urlPath: string) {
-  return urlPath.replace(/\/$/, '').split('/').pop();
-}
+  // Find unique parts for each path
+  const uniqueParts = paths.map((currentPath, index) => {
+    const otherPaths = paths.slice(0, index).concat(paths.slice(index + 1));
+    let uniquePart = '';
 
-function getUniqueSegments(urls: string[]) {
-  const paths = urls.map((url) =>
-    new URL(url).pathname.split('/').filter((segment) => segment)
-  );
-
-  if (urls.length === 1) {
-    return [getLastSegment(paths[0].join('/'))];
-  }
-
-  const uniqueSegments = paths.map((pathSegments, i, allPaths) => {
-    let uniqueSegment = pathSegments.join('/');
-    for (const otherPath of allPaths) {
-      if (
-        otherPath !== pathSegments &&
-        otherPath.includes(pathSegments.join('/'))
-      ) {
-        uniqueSegment = pathSegments
-          .filter((segment) => !otherPath.includes(segment))
-          .join('/');
+    for (let i = 0; i < currentPath.length; i++) {
+      const segment = currentPath.slice(0, i + 1).join('/');
+      if (otherPaths.every((path) => !path.join('/').startsWith(segment))) {
+        uniquePart = currentPath.slice(0, i + 1).join('-');
         break;
       }
     }
-    return getLastSegment(uniqueSegment);
+
+    return uniquePart || currentPath.join('-') || 'home';
   });
 
-  return uniqueSegments;
-}
-
-export const getDefaultOutNames = (urls: string[]) => {
-  const uniqueSegments = getUniqueSegments(urls);
-  return uniqueSegments.map((segment, index) =>
-    slugify(segment || `img-${index}`)
-  );
+  return uniqueParts;
 };

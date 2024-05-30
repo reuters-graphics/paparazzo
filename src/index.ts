@@ -1,16 +1,32 @@
-import { type Browser, chromium, Page } from 'playwright';
+import { type Browser, chromium, type Page } from 'playwright';
 import fs from 'fs';
 import path from 'path';
-import { getDefaultOutNames } from 'utils/uniqify';
+import { getUniqueSlugs } from 'utils/uniqify';
+import ora from 'ora';
 
-type Opts = {
+/**
+ * Paparazzo options
+ */
+export type Options = {
+  /**
+   * Image format
+   */
   format: 'png' | 'jpeg';
+  /**
+   * Directory relative to current working directory to output images.
+   */
   outDir?: string;
+  /**
+   * If format is "jpeg", the quality of the image, 0 - 100.
+   */
   quality?: number;
+  /**
+   * Crawl links on the page at `url` and look for more pappable shots.
+   */
   crawl?: boolean;
 };
 
-const DEFAULT_OPTS: Opts = {
+const DEFAULT_OPTS: Options = {
   format: 'jpeg',
 };
 
@@ -19,20 +35,21 @@ function isNotNull<T>(value: T | null): value is T {
 }
 
 export class Paparazzo {
-  browser?: Browser;
+  private browser?: Browser;
+  private page?: Page;
 
   private async getMetaContent(page: Page, metaName: string) {
-    const metaTag = page.locator(`meta[name="${metaName}"]`);
+    const metaTag = await page.locator(`meta[name="${metaName}"]`);
+    if ((await metaTag.count()) === 0) return null;
     const content = await metaTag.getAttribute('content');
     return content;
   }
 
   private async getLinks(url: string) {
-    if (!this.browser) throw new Error("Can't call this method directly");
-    const page = await this.browser.newPage();
-    await page.goto(url);
+    if (!this.page) throw new Error("Can't call this method directly");
+    await this.page.goto(url);
 
-    const aTags = await page.locator('a');
+    const aTags = await this.page.locator('a');
     const links = await aTags.evaluateAll((anchors) =>
       anchors.map((anchor) => anchor.getAttribute('href'))
     );
@@ -47,34 +64,40 @@ export class Paparazzo {
     url: string,
     selector: string,
     outName: string,
-    opts: Opts
+    opts: Options
   ) {
-    if (!this.browser) throw new Error("Can't call this method directly");
+    if (!this.page) throw new Error("Can't call this method directly");
 
     const { format, quality, outDir } = opts;
 
-    const page = await this.browser.newPage();
-    await page.goto(url);
+    await this.page.goto(url);
 
-    const metaOutname = await this.getMetaContent(page, 'paparazzo:outname');
-    const metaSelector = await this.getMetaContent(page, 'paparazzo:selector');
+    const metaOutname = await this.getMetaContent(this.page, 'paparazzo:name');
+    const metaSelector = await this.getMetaContent(
+      this.page,
+      'paparazzo:selector'
+    );
 
-    await page.waitForSelector(metaSelector || selector);
-    const element = await page.locator(metaSelector || selector);
+    const element = this.page.locator(metaSelector || selector);
+    await element.waitFor({ state: 'visible', timeout: 500 });
 
-    if (!element) {
+    const boundingBox = await element.boundingBox();
+
+    if (!element || !boundingBox) {
       console.warn(
         `Unable to find element with selector "${metaSelector || selector}" on page: ${url}`
       );
       return;
     }
 
-    const elementScreenshotBuffer = await element.screenshot({
+    const elementScreenshotBuffer = await this.page.screenshot({
       type: format,
-      quality: quality || 90,
+      quality: format === 'jpeg' ? quality || 90 : undefined,
+      clip: boundingBox,
+      scale: 'css',
     });
 
-    const imgFileName = metaOutname || outName + `.${format}`;
+    const imgFileName = (metaOutname || outName) + `.${format}`;
     const imgPath = path.join(
       process.cwd(),
       outDir || 'paparazzo',
@@ -86,9 +109,11 @@ export class Paparazzo {
   async shoot(
     url: string,
     selector: string = 'body',
-    opts: Opts = DEFAULT_OPTS
+    opts: Options = DEFAULT_OPTS
   ) {
     this.browser = await chromium.launch({ headless: true });
+    this.page = await this.browser.newPage();
+
     const { crawl, format } = opts;
 
     if (!['jpeg', 'png'].includes(format))
@@ -101,13 +126,23 @@ export class Paparazzo {
       urls = [...urls, ...crawledUrls];
     }
 
-    const outNames = getDefaultOutNames(urls);
+    const outNames = getUniqueSlugs(urls);
+
+    console.log(`📸 Shooting ${urls.length} sites`);
+
+    const spinner = ora({
+      text: `Starting up...`,
+      spinner: 'line',
+    }).start();
 
     for (const url of urls) {
+      spinner.text = url;
       const i = urls.indexOf(url);
       const outName = outNames[i];
       await this.getShot(url, selector, outName, opts);
     }
+    spinner.text = 'Finished';
+    spinner.succeed();
 
     this.browser.close();
   }

@@ -1,0 +1,43 @@
+body {
+  padding: 0;
+  margin: 0;
+}
+
+.permanent-marker {
+  font-family: 'Permanent Marker', cursive;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 2rem;
+}
+
+.box {
+  width: 600px;
+  height: 400px;
+}
+
+.paparazzo {
+  position: relative;
+}
+
+.relative {
+  position: relative;
+}
+.absolute {
+  position: absolute;
+}
+.top {
+  top: 10px;
+}
+.bottom {
+  bottom: 10px;
+}
+.left {
+  left: 10px;
+}
+.right {
+  right: 10px;
+}
+
+.white {
+  color: white;
+}
