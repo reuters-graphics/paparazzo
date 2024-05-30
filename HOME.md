@@ -6,7 +6,7 @@ Paparazzo is a CLI tool for taking screenshots of page elements.
 
 It was first developed to help with the onerous task of making share cards for news applications at Reuters.
 
-**Glossary:** A *paparazzo* is a member of the *paparazzi*. Someone who's had their photo snapped by such a one is said to have been *papped*.
+**Glossary:** A _paparazzo_ is a member of the _paparazzi_. Someone who's had their photo snapped by such a one is said to have been _papped_.
 
 ## Features
 
@@ -94,9 +94,9 @@ Custom output name.
 
 ```html
 <!-- Will generate my-image-name.png/jpeg in your output directory -->
-<meta name="paparazzo:name" content="my-image-name" >
+<meta name="paparazzo:name" content="my-image-name" />
 <!-- my-folder/my-image-name.png/jpeg in your output directory -->
-<meta name="paparazzo:name" content="my-folder/my-image-name" >
+<meta name="paparazzo:name" content="my-folder/my-image-name" />
 ```
 
 #### `paparazzo:selector`
@@ -104,7 +104,7 @@ Custom output name.
 Custom CSS selector for the element to papp in your page.
 
 ```html
-<meta name="paparazzo:selector" content="#my-image-id" >
+<meta name="paparazzo:selector" content="#my-image-id" />
 <!-- ... or ... -->
-<meta name="paparazzo:selector" content=".my-image-class" >
+<meta name="paparazzo:selector" content=".my-image-class" />
 ```
