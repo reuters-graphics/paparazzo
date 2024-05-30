@@ -44,7 +44,8 @@ export default [
     input: 'src/index.ts',
     output,
     plugins,
-  }, {
+  },
+  {
     input: 'src/cli.ts',
     output: { ...output, ...{ banner: '#!/usr/bin/env node' } },
     plugins,
