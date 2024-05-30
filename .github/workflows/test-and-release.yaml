@@ -13,7 +13,7 @@ jobs:
       - id: checkout
         name: Checkout repository
         uses: actions/checkout@v3
-      
+
       - id: setup-pnpm
         name: Setup PNPM
         uses: pnpm/action-setup@v2
@@ -41,12 +41,12 @@ jobs:
     needs: lint
     strategy:
       matrix:
-        node-version: ['18', '20']
+        node-version: ['20']
     steps:
       - id: checkout
         name: Checkout repository
         uses: actions/checkout@v3
-      
+
       - id: setup-pnpm
         name: Setup PNPM
         uses: pnpm/action-setup@v2
@@ -67,8 +67,6 @@ jobs:
       - id: tests
         name: Run tests
         run: pnpm run test
-        env:
-          TESTING=true
 
   release:
     name: Release
@@ -91,7 +89,7 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.event.repository.default_branch }}
-        
+
       - id: setup-pnpm
         name: Setup PNPM
         uses: pnpm/action-setup@v2
@@ -113,7 +111,7 @@ jobs:
       - id: build
         name: Build package
         run: pnpm build
-      
+
       - id: build-docs
         name: Build docs
         run: pnpm docs:build
