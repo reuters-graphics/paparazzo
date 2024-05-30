@@ -1,0 +1,42 @@
+name: Lint
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  checks: write
+  contents: write
+
+jobs:
+  run-linters:
+    name: Run linters
+    runs-on: ubuntu-latest
+
+    steps:
+      - id: checkout
+        name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - id: setup
+        name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - id: install
+        name: Install dependencies
+        run: npm ci
+
+      - id: lint
+        name: Run linters
+        uses: wearerequired/lint-action@v2
+        with:
+          eslint: true
+          prettier: true
+          prettier_auto_fix: true

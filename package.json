@@ -27,13 +27,17 @@
   },
   "scripts": {
     "serve": "live-server ./test/site/",
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "npm run build:package",
     "postinstall": "npx playwright install",
-    "build": "rollup --config rollup.config.js",
-    "docs:build": "typedoc",
+    "build:package": "rollup --config rollup.config.js",
+    "build:docs": "typedoc",
     "docs:preview": "live-server ./docs",
-    "test": "npm run build && c8 mocha test/*.ts",
-    "test:snapshot": "npm run build && GEN_SNAPSHOT=1 c8 mocha test/*.ts"
+    "test": "npm run build:package && c8 mocha test/*.ts",
+    "test:snapshot": "npm run build:package && GEN_SNAPSHOT=1 c8 mocha test/*.ts",
+    "lint": "prettier --check . && eslint .",
+    "format": "prettier --write .",
+    "changeset:version": "changeset version",
+    "changeset:publish": "git add --all && changeset publish"
   },
   "lint-staged": {
     "./src/*.js": [
@@ -42,6 +46,7 @@
     ]
   },
   "devDependencies": {
+    "@changesets/cli": "^2.27.5",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-typescript": "^11.1.6",
     "@tsconfig/recommended": "^1.0.3",
