@@ -1,6 +1,6 @@
 {
   "name": "@reuters-graphics/paparazzo",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
   "main": "./dist/index.js",
   "exports": "./dist/index.js",
