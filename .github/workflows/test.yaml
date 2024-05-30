@@ -18,17 +18,23 @@ jobs:
         with:
           fetch-depth: 0
 
+      - id: pnpm
+        name: PNPM action setup
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8
+
       - id: setup
         name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
+          cache: pnpm
 
       - id: install
         name: Install dependencies
-        run: npm ci
+        run: pnpm install
 
       - id: test
         name: Run tests
-        run: npm run test
+        run: pnpm run test
