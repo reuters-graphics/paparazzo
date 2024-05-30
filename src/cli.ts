@@ -17,7 +17,7 @@ sade('paparazzo [url]', true)
   .option('-f, --format', 'Output image format, either "jpeg" or "png"', 'jpeg')
   .option(
     '-o, --outDir',
-    'Directory to output image, relative to current working director',
+    'Directory to output image, relative to cwd',
     'paparazzo'
   )
   .option('-q, --quality', 'Image quality (jpeg format only)', 90)

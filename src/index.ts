@@ -17,7 +17,7 @@ export type Options = {
    */
   outDir?: string;
   /**
-   * If format is "jpeg", the quality of the image, 0 - 100.
+   * If format is `jpeg`, the quality of the image, 0 - 100.
    */
   quality?: number;
   /**
@@ -103,9 +103,51 @@ export class Paparazzo {
       outDir || 'paparazzo',
       imgFileName
     );
+    if (!fs.existsSync(path.dirname(imgPath)))
+      fs.mkdirSync(path.dirname(imgPath), { recursive: true });
     fs.writeFileSync(imgPath, elementScreenshotBuffer);
   }
 
+  /**
+   * Take screenshots of page elements.
+   *
+   * @example
+   * ```javascript
+   * const paparazzo = new Paparazzo();
+   *
+   * await paparazzo.shoot('https://mysite.com/page/', {
+   *  crawl: true,
+   *  selector: '.sharecard',
+   *  outDir: './sharecards/',
+   * });
+   * ```
+   *
+   * ### CLI
+   *
+   *
+   * ```console
+   * Usage
+   *   $ paparazzo [url] [options]
+   *
+   * Options
+   *   -s, --selector    CSS selector of element on the page to screenshot  (default body)
+   *   -f, --format      Output image format, either "jpeg" or "png"  (default jpeg)
+   *   -o, --outDir      Directory to output image, relative to cwd  (default paparazzo)
+   *   -q, --quality     Image quality (jpeg format only)  (default 90)
+   *   -c, --crawl       Crawl links for other pages  (default false)
+   *   -v, --version     Displays current version
+   *   -h, --help        Displays this message
+   * ```
+   *
+   * @example
+   * ```console
+   * $ paparazzo https://mysite.com/page/ -s ".sharecard" -o "sharecards/" --crawl
+   * ```
+   *
+   * @param url
+   * @param selector
+   * @param opts
+   */
   async shoot(
     url: string,
     selector: string = 'body',
