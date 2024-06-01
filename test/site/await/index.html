@@ -25,9 +25,15 @@
       </svg>
     </div>
     <script>
-      setTimeout(function() {
+      setTimeout(function () {
         const div = document.createElement('div');
-        div.classList.add('absolute', 'bottom', 'left', 'permanent-marker', 'awaited');
+        div.classList.add(
+          'absolute',
+          'bottom',
+          'left',
+          'permanent-marker',
+          'awaited'
+        );
         div.textContent = 'Kielbasa';
         const paparazzoDiv = document.querySelector('div.paparazzo');
         paparazzoDiv.appendChild(div);
