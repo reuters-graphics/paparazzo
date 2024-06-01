@@ -24,6 +24,10 @@ export type Options = {
    * Crawl links on the page at `url` and look for more pappable shots.
    */
   crawl?: boolean;
+  /**
+   * CSS selector of an element to await on the page before taking a screenshot.
+   */
+  awaitElement?: string;
 };
 
 const DEFAULT_OPTS: Options = {
@@ -68,7 +72,7 @@ export class Paparazzo {
   ) {
     if (!this.page) throw new Error("Can't call this method directly");
 
-    const { format, quality, outDir } = opts;
+    const { format, quality, outDir, awaitElement } = opts;
 
     await this.page.goto(url);
 
@@ -78,8 +82,13 @@ export class Paparazzo {
       'paparazzo:selector'
     );
 
+    if (awaitElement) {
+      const awaitedElement = this.page.locator(awaitElement);
+      await awaitedElement.waitFor({ state: 'visible', timeout: 5000 });
+    }
+
     const element = this.page.locator(metaSelector || selector);
-    await element.waitFor({ state: 'visible', timeout: 500 });
+    await element.waitFor({ state: 'visible', timeout: 2500 });
 
     const boundingBox = await element.boundingBox();
 
@@ -135,6 +144,7 @@ export class Paparazzo {
    *   -o, --outDir      Directory to output image, relative to cwd  (default paparazzo)
    *   -q, --quality     Image quality (jpeg format only)  (default 90)
    *   -c, --crawl       Crawl links for other pages  (default false)
+   *   -a, --await       CSS selecor of element await before taking screenshot
    *   -v, --version     Displays current version
    *   -h, --help        Displays this message
    * ```

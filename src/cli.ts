@@ -22,8 +22,12 @@ sade('paparazzo [url]', true)
   )
   .option('-q, --quality', 'Image quality (jpeg format only)', 90)
   .option('-c, --crawl', 'Crawl links for other pages', false)
+  .option(
+    '-a, --await',
+    'CSS selecor of element await before taking screenshot'
+  )
   .action(async (url: string, opts: Record<string, string>) => {
-    const { selector, format, quality, crawl, outDir } = opts;
+    const { selector, format, quality, crawl, outDir, await: awaitEl } = opts;
 
     const paparazzo = new Paparazzo();
 
@@ -32,6 +36,7 @@ sade('paparazzo [url]', true)
       outDir: outDir as string,
       quality: parseInt(quality) || 90,
       crawl: !!crawl,
+      awaitElement: awaitEl,
     };
 
     await paparazzo.shoot(url, selector, OPTS);
