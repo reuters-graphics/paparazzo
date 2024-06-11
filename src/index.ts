@@ -97,6 +97,7 @@ export class Paparazzo {
 
     const element = this.page.locator(metaSelector || selector);
     await element.waitFor({ state: 'visible', timeout: 2500 });
+    await element.scrollIntoViewIfNeeded({ timeout: 2000 });
 
     const boundingBox = await element.boundingBox();
 
