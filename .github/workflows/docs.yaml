@@ -42,6 +42,10 @@ jobs:
       - id: install
         name: Install dependencies
         run: pnpm install
+      
+      - id: build
+        name: Build package
+        run: pnpm run build:package
 
       - id: docs
         name: Build docs
