@@ -1,5 +1,11 @@
 # @reuters-graphics/paparazzo
 
+## 0.0.6
+
+### Patch Changes
+
+- 98dacba: Adds viewport dimensions and scrolls element into view
+
 ## 0.0.5
 
 ### Patch Changes
