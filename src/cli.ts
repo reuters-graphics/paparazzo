@@ -24,10 +24,22 @@ sade('paparazzo [url]', true)
   .option('-c, --crawl', 'Crawl links for other pages', false)
   .option(
     '-a, --await',
-    'CSS selecor of element await before taking screenshot'
+    'CSS selecor of element to await before taking screenshot'
+  )
+  .option(
+    '-t, --timeout',
+    'Milliseconds to wait for the page to settle before taking screenshot'
   )
   .action(async (url: string, opts: Record<string, string>) => {
-    const { selector, format, quality, crawl, outDir, await: awaitEl } = opts;
+    const {
+      selector,
+      format,
+      quality,
+      crawl,
+      outDir,
+      await: awaitEl,
+      timeout,
+    } = opts;
 
     const paparazzo = new Paparazzo();
 
@@ -37,6 +49,7 @@ sade('paparazzo [url]', true)
       quality: parseInt(quality) || 90,
       crawl: !!crawl,
       awaitElement: awaitEl,
+      timeout: timeout ? parseInt(timeout) : undefined,
     };
 
     await paparazzo.shoot(url, selector, OPTS);

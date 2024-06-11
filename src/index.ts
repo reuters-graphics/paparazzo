@@ -28,6 +28,10 @@ export type Options = {
    * CSS selector of an element to await on the page before taking a screenshot.
    */
   awaitElement?: string;
+  /**
+   * A number of milliseconds to wait for the page to settle before taking the screenshot.
+   */
+  timeout?: number;
 };
 
 const DEFAULT_OPTS: Options = {
@@ -72,7 +76,7 @@ export class Paparazzo {
   ) {
     if (!this.page) throw new Error("Can't call this method directly");
 
-    const { format, quality, outDir, awaitElement } = opts;
+    const { format, quality, outDir, awaitElement, timeout } = opts;
 
     await this.page.goto(url);
 
@@ -85,6 +89,10 @@ export class Paparazzo {
     if (awaitElement) {
       const awaitedElement = this.page.locator(awaitElement);
       await awaitedElement.waitFor({ state: 'visible', timeout: 5000 });
+    }
+
+    if (timeout) {
+      await new Promise((resolve) => setTimeout(resolve, timeout));
     }
 
     const element = this.page.locator(metaSelector || selector);
@@ -144,7 +152,8 @@ export class Paparazzo {
    *   -o, --outDir      Directory to output image, relative to cwd  (default paparazzo)
    *   -q, --quality     Image quality (jpeg format only)  (default 90)
    *   -c, --crawl       Crawl links for other pages  (default false)
-   *   -a, --await       CSS selecor of element await before taking screenshot
+   *   -a, --await       CSS selecor of element to await before taking screenshot
+   *   -t, --timeout     Milliseconds to wait for the page to settle before taking screenshot
    *   -v, --version     Displays current version
    *   -h, --help        Displays this message
    * ```
