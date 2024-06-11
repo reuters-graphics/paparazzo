@@ -32,6 +32,15 @@ export type Options = {
    * A number of milliseconds to wait for the page to settle before taking the screenshot.
    */
   timeout?: number;
+  /**
+   * Viewport dimensions for Playwright browser emulator
+   */
+  viewport?: {
+    /** Viewport width in pixels */
+    width: number;
+    /** Viewport height in pixels */
+    height: number;
+  };
 };
 
 const DEFAULT_OPTS: Options = {
@@ -173,13 +182,15 @@ export class Paparazzo {
     selector: string = 'body',
     opts: Options = DEFAULT_OPTS
   ) {
-    this.browser = await chromium.launch({ headless: true });
-    this.page = await this.browser.newPage();
-
-    const { crawl, format } = opts;
+    const { crawl, format, viewport } = opts;
 
     if (!['jpeg', 'png'].includes(format))
       throw new Error('Invalid image format');
+
+    this.browser = await chromium.launch({ headless: true });
+    this.page = await this.browser.newPage({
+      viewport,
+    });
 
     let urls: string[] = [url];
 
