@@ -34,6 +34,8 @@ Options
   -o, --outDir      Directory to output image, relative to cwd  (default paparazzo)
   -q, --quality     Image quality (jpeg format only)  (default 90)
   -c, --crawl       Crawl links for other pages  (default false)
+  -a, --await       CSS selecor of element to await before taking screenshot
+  -t, --timeout     Milliseconds to wait for the page to settle before taking screenshot
   -v, --version     Displays current version
   -h, --help        Displays this message
 ```
@@ -49,9 +51,8 @@ import Paparazzo from '@reuters-graphics/paparazzo';
 
 const paparazzo = new Paparazzo();
 
-await paparazzo.shoot('https://mysite.com/page/', {
+await paparazzo.shoot('https://mysite.com/page/', '.sharecard', {
   crawl: true,
-  selector: '.sharecard',
   outDir: './sharecards/',
 });
 ```
@@ -90,7 +91,7 @@ You can add meta tags to each page to tell paparazzo how to papp your page.
 
 #### `paparazzo:name`
 
-Custom output name.
+Custom output name (without the file extension, which will be automatically appended based on image format).
 
 ```html
 <!-- Will generate my-image-name.png/jpeg in your output directory -->
