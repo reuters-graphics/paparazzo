@@ -1,5 +1,11 @@
 # @reuters-graphics/paparazzo
 
+## 0.0.5
+
+### Patch Changes
+
+- 3e65a86: Adds timeout
+
 ## 0.0.4
 
 ### Patch Changes
